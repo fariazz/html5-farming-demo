@@ -14,19 +14,65 @@ farming.start = function(){
     var gameObj = {
         width: 320,
         height: 480,
-        tile_size: 32,
-        num_tiles_x: 10,
-        num_tiles_y: 13,
-        landLayer_w: 32*10, 
-        landLayer_h: 32*13,
-        controlsLayer_w: 32*10,
-        controlsLayer_h: 32*2
+        tile_size: 64,
+        num_tiles_x: 5,
+        num_tiles_y: 6,
+        landLayer_w: 64*5, 
+        landLayer_h: 64*6,
+        controlsLayer_w: 64*5,
+        controlsLayer_h: 64*1.5,
+        costPlowing: 5
     }
     
     //player obj
     var playerObj = {
-        gold: 100
+        money: 300,
+        currentCrop: 0,        
     }
+    
+    //crops
+    gameObj.crops = [
+        {
+            name: 'tomato',
+            cost: 10,
+            revenue: 17,
+            time_to_ripe: 10, //secods
+            time_to_death: 10, //second from when it's ripe
+            image: 'tomato.png'
+        },
+        {
+            name: 'artichoke',
+            cost: 20,
+            revenue: 33,
+            time_to_ripe: 70,
+            time_to_death: 20,
+            image: 'artichoke.png'
+        },
+        {
+            name: 'lettuce',
+            cost: 15,
+            revenue: 26,
+            time_to_ripe: 30,
+            time_to_death: 30,
+            image: 'lettuce.png'
+        },
+        {
+            name: 'aubergine',
+            cost: 30,
+            revenue: 45,
+            time_to_ripe: 120,
+            time_to_death: 120,
+            image: 'aubergine.png'
+        },
+        {
+            name: 'peppers',
+            cost: 40,
+            revenue: 60,
+            time_to_ripe: 180,
+            time_to_death: 120,
+            image: 'peppers.png'
+        },
+    ];
     
     var director = new lime.Director(document.body,gameObj.width,gameObj.height);     
     director.makeMobileWebAppCapable();     
@@ -38,8 +84,6 @@ farming.start = function(){
     
     gameScene.appendChild(landLayer);
     gameScene.appendChild(controlsLayer);
-    
-    
     
     //controls area
     var controlArea = new lime.Sprite().setAnchorPoint(0,0)
@@ -55,17 +99,31 @@ farming.start = function(){
     controlsLayer.appendChild(shopButton); 
     
     //money
-    var goldLabel = new lime.Label().setText('$'+playerObj.gold).setFontColor('#E8FC08')
+    var moneyLabel = new lime.Label().setText('$'+playerObj.money).setFontColor('#E8FC08')
         .setPosition(gameObj.controlsLayer_w-50, gameObj.height-gameObj.controlsLayer_h/2)
-    controlsLayer.appendChild(goldLabel); 
+    controlsLayer.appendChild(moneyLabel); 
+    
+    //updating money indicator
+    gameObj.updateMoney = function() {
+        moneyLabel.setText('$'+playerObj.money);
+    };
     
     //create land elements
     for(var i=0; i<gameObj.num_tiles_x; i++) {
         for(var j=0; j<gameObj.num_tiles_y; j++) {
-            var landElement = new farming.Land(gameObj).setPosition(i*gameObj.tile_size, j*gameObj.tile_size);
+            var landElement = new farming.Land(gameObj, playerObj).setPosition(i*gameObj.tile_size, j*gameObj.tile_size);
             landLayer.appendChild(landElement);
         }
     }
     
     director.replaceScene(gameScene); 
+    
+    //shop
+    var shopScene = new lime.Scene().setRenderer(lime.Renderer.CANVAS);
+    var shopLayer = new lime.Layer().setAnchorPoint(0, 0);
+    
+    //shop items
+    for(var i=0; i<gameObj.crops.length; i++) {
+        
+    }
 }
