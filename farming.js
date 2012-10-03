@@ -25,13 +25,13 @@ farming.start = function(){
         
         //shop
         shop_margin_x: 50,
-        shop_margin_y: 20,
+        shop_margin_y: 20
     }
     
     //player obj
     var playerObj = {
         money: 300,
-        currentCrop: 0,        
+        currentCrop: 0     
     }
     
     //crops
@@ -39,7 +39,7 @@ farming.start = function(){
         {
             name: 'tomato',
             cost: 10,
-            revenue: 17,
+            revenue: 12,
             time_to_ripe: 10, //secods
             time_to_death: 10, //second from when it's ripe
             image: 'tomato.png'
@@ -47,8 +47,8 @@ farming.start = function(){
         {
             name: 'artichoke',
             cost: 20,
-            revenue: 33,
-            time_to_ripe: 70,
+            revenue: 43,
+            time_to_ripe: 60,
             time_to_death: 20,
             image: 'artichoke.png'
         },
@@ -63,7 +63,7 @@ farming.start = function(){
         {
             name: 'eggplant',
             cost: 30,
-            revenue: 45,
+            revenue: 78,
             time_to_ripe: 120,
             time_to_death: 120,
             image: 'eggplant.png'
@@ -71,11 +71,11 @@ farming.start = function(){
         {
             name: 'peppers',
             cost: 40,
-            revenue: 60,
+            revenue: 82,
             time_to_ripe: 180,
             time_to_death: 120,
             image: 'peppers.png'
-        },
+        }
     ];
     
     var director = new lime.Director(document.body,gameObj.width,gameObj.height);     
@@ -135,7 +135,6 @@ farming.start = function(){
     
     //shop items
     for(var i=0; i<gameObj.crops.length; i++) {
-        console.log(item);
         var item = new lime.Sprite().setAnchorPoint(0,0).setPosition(gameObj.shop_margin_x, gameObj.shop_margin_y + (gameObj.shop_margin_y + gameObj.tile_size)*i)
             .setFill('images/'+gameObj.crops[i].image).setSize(gameObj.tile_size, gameObj.tile_size);
         shopLayer.appendChild(item);
@@ -149,11 +148,29 @@ farming.start = function(){
         var label = new lime.Label().setText('revenue: $'+gameObj.crops[i].revenue).setFontColor('#E8FC08')
         .setPosition(gameObj.shop_margin_x+150, gameObj.shop_margin_y*3.4 + (gameObj.shop_margin_y + gameObj.tile_size)*i);
         shopLayer.appendChild(label);
+        
+        //pick crop
+        (function(item, i) {
+            goog.events.listen(item,['mousedown', 'touchstart'], function(e) {
+                playerObj.currentCrop = i;
+                director.replaceScene(gameScene);
+            });
+        })(item, i);
     }
     
+    //close button
+    var closeButton = new lime.GlossyButton().setColor('#133242').setText('Back')
+        .setPosition(gameObj.width/2, gameObj.height-25)
+        .setSize(80, 40);
+    shopLayer.appendChild(closeButton);
     
-    //launch shop
+    //launch shop event
     goog.events.listen(shopButton,['mousedown', 'touchstart'], function(e) {
         director.replaceScene(shopScene);
+    });
+    
+    //close shop event
+    goog.events.listen(closeButton,['mousedown', 'touchstart'], function(e) {
+        director.replaceScene(gameScene);
     });
 }
