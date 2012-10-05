@@ -24,7 +24,6 @@ farming.Land = function(gameObj, playerObj) {
     var land = this;
     goog.events.listen(this,['mousedown', 'touchstart'], function(e) {
         e.event.stopPropagation();        
-        console.log(land.state);
         if(land.state == farming.EMPTY && playerObj.money >= gameObj.costPlowing) {
             //plow land
             land.setFill('images/plowed.png')

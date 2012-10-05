@@ -28,7 +28,7 @@ farming.start = function(){
         shop_margin_y: 20
     }
     
-    //player obj
+    //player object
     var playerObj = {
         money: 300,
         currentCrop: 0     
@@ -39,17 +39,17 @@ farming.start = function(){
         {
             name: 'tomato',
             cost: 10,
-            revenue: 12,
+            revenue: 18,
             time_to_ripe: 10, //secods
-            time_to_death: 10, //second from when it's ripe
+            time_to_death: 30, //second from when it's ripe
             image: 'tomato.png'
         },
         {
             name: 'artichoke',
             cost: 20,
-            revenue: 43,
+            revenue: 38,
             time_to_ripe: 60,
-            time_to_death: 20,
+            time_to_death: 60,
             image: 'artichoke.png'
         },
         {
@@ -57,7 +57,7 @@ farming.start = function(){
             cost: 15,
             revenue: 26,
             time_to_ripe: 30,
-            time_to_death: 30,
+            time_to_death: 60,
             image: 'lettuce.png'
         },
         {
@@ -73,7 +73,7 @@ farming.start = function(){
             cost: 40,
             revenue: 82,
             time_to_ripe: 180,
-            time_to_death: 120,
+            time_to_death: 180,
             image: 'peppers.png'
         }
     ];
@@ -101,8 +101,6 @@ farming.start = function(){
         .setPosition(60, gameObj.height-gameObj.controlsLayer_h/2)
         .setSize(80, 40);
     controlsLayer.appendChild(shopButton); 
-    
-    
     
     //money
     var moneyLabel = new lime.Label().setText('$'+playerObj.money).setFontColor('#E8FC08')
@@ -133,6 +131,22 @@ farming.start = function(){
     shopLayer.appendChild(shopBackground);
     shopScene.appendChild(shopLayer);
     
+    //close button
+    var closeButton = new lime.GlossyButton().setColor('#133242').setText('Back')
+        .setPosition(gameObj.width/2, gameObj.height-25)
+        .setSize(80, 40);
+    shopLayer.appendChild(closeButton);
+    
+    //launch shop event
+    goog.events.listen(shopButton,['mousedown', 'touchstart'], function(e) {
+        director.replaceScene(shopScene);
+    });
+    
+    //close shop event
+    goog.events.listen(closeButton,['mousedown', 'touchstart'], function(e) {
+        director.replaceScene(gameScene);
+    });
+    
     //shop items
     for(var i=0; i<gameObj.crops.length; i++) {
         var item = new lime.Sprite().setAnchorPoint(0,0).setPosition(gameObj.shop_margin_x, gameObj.shop_margin_y + (gameObj.shop_margin_y + gameObj.tile_size)*i)
@@ -157,20 +171,4 @@ farming.start = function(){
             });
         })(item, i);
     }
-    
-    //close button
-    var closeButton = new lime.GlossyButton().setColor('#133242').setText('Back')
-        .setPosition(gameObj.width/2, gameObj.height-25)
-        .setSize(80, 40);
-    shopLayer.appendChild(closeButton);
-    
-    //launch shop event
-    goog.events.listen(shopButton,['mousedown', 'touchstart'], function(e) {
-        director.replaceScene(shopScene);
-    });
-    
-    //close shop event
-    goog.events.listen(closeButton,['mousedown', 'touchstart'], function(e) {
-        director.replaceScene(gameScene);
-    });
 }
